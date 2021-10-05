@@ -40,13 +40,18 @@ class CompoundPod(BasePod, ExitStack):
         self.is_tail_router = True
         self.head_args = BasePod._copy_to_head_args(args, args.polling)
         self.tail_args = BasePod._copy_to_tail_args(self.args, self.args.polling)
-        self.assign_shards()
+        self.shards = []  # type: List['Pod']
+        self.assign_shards_args()
+
+    def assign_shards_args(self):
+        """Assign shards to the CompoundPod"""
+        cargs = copy.copy(self.args)
+        self.shards_args = self._set_shard_args(cargs, self.head_args, self.tail_args)
 
     def assign_shards(self):
         """Assign shards to the CompoundPod"""
-        cargs = copy.copy(self.args)
-        self.shards = []  # type: List['Pod']
-        self.shards_args = self._set_shard_args(cargs, self.head_args, self.tail_args)
+        self.shards.clear()
+
         for _args in self.shards_args:
             if getattr(self.args, 'noblock_on_start', False):
                 _args.noblock_on_start = True
@@ -104,6 +109,7 @@ class CompoundPod(BasePod, ExitStack):
             If one of the :class:`Pod` fails to start, make sure that all of them
             are properly closed.
         """
+        self.assign_shards()
         if getattr(self.args, 'noblock_on_start', False):
             head_args = self.head_args
             head_args.noblock_on_start = True
@@ -125,6 +131,8 @@ class CompoundPod(BasePod, ExitStack):
                 tail_args = self.tail_args
                 self.tail_pea = Pea(tail_args)
                 self._enter_pea(self.tail_pea)
+                for p in self.shards:
+                    p.activate()
             except:
                 self.close()
                 raise

@@ -476,7 +476,10 @@ class Pod(BasePod, ExitFIFO):
         self.peas.append(pea)
         self.enter_context(pea)
 
-    def _activate(self):
+    def activate(self):
+        """
+        Activate all peas in this pod
+        """
         # order is good. Activate from tail to head
         for pea in reversed(self.peas):
             pea.activate_runtime()
@@ -498,7 +501,7 @@ class Pod(BasePod, ExitFIFO):
                 _args.noblock_on_start = True
             self._enter_pea(BasePea(_args))
         if not getattr(self.args, 'noblock_on_start', False):
-            self._activate()
+            self.activate()
         return self
 
     def wait_start_success(self) -> None:
@@ -513,7 +516,7 @@ class Pod(BasePod, ExitFIFO):
         try:
             for p in self.peas:
                 p.wait_start_success()
-            self._activate()
+            self.activate()
         except:
             self.close()
             raise

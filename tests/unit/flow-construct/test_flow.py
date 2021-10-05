@@ -144,7 +144,7 @@ def test_flow_identical(tmpdir):
         node = f._pod_nodes['chunk_seg']
         assert node.head_args.socket_in == SocketType.ROUTER_BIND
         assert node.head_args.socket_out == SocketType.ROUTER_BIND
-        for arg in node.peas_args['peas']:
+        for arg in node.shards_args:
             assert arg.socket_in == SocketType.DEALER_CONNECT
             assert arg.socket_out == SocketType.PUSH_CONNECT
         assert node.tail_args.socket_in == SocketType.PULL_BIND
@@ -153,7 +153,7 @@ def test_flow_identical(tmpdir):
         node = f._pod_nodes['wqncode1']
         assert node.head_args.socket_in == SocketType.ROUTER_BIND
         assert node.head_args.socket_out == SocketType.ROUTER_BIND
-        for arg in node.peas_args['peas']:
+        for arg in node.shards_args:
             assert arg.socket_in == SocketType.DEALER_CONNECT
             assert arg.socket_out == SocketType.PUSH_CONNECT
         assert node.tail_args.socket_in == SocketType.PULL_BIND
@@ -162,7 +162,7 @@ def test_flow_identical(tmpdir):
         node = f._pod_nodes['encode2']
         assert node.head_args.socket_in == SocketType.ROUTER_BIND
         assert node.head_args.socket_out == SocketType.ROUTER_BIND
-        for arg in node.peas_args['peas']:
+        for arg in node.shards_args:
             assert arg.socket_in == SocketType.DEALER_CONNECT
             assert arg.socket_out == SocketType.PUSH_CONNECT
         assert node.tail_args.socket_in == SocketType.PULL_BIND

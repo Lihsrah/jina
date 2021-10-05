@@ -151,7 +151,7 @@ class PartialFlowStore(PartialStore):
                                                 ),
                                             )
                             # Update shard_args according to updated head & tail args
-                            pod.assign_shards()
+                            pod.assign_shards_args()
                 else:
                     # avoid setting runs_in_docker for Pods with parallel > 1 and using `ZEDRuntime`
                     # else, replica-peas would try connecting to head/tail-pea via __docker_host__
