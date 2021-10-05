@@ -208,7 +208,7 @@ class CompoundPod(BasePod, ExitStack):
         for idx in range(args.shards):
             _args = copy.deepcopy(args)
             pod_host_list = [
-                host for _, host in zip(range(args.shards), host_generator)
+                host for _, host in zip(range(args.replicas), host_generator)
             ]
             _args.peas_hosts = pod_host_list
             _args.shard_id = idx
